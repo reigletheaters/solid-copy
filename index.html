@@ -153,6 +153,28 @@ details p{margin-top:8px;color:var(--muted)}
 .cols3 h3{font-size:18px;text-transform:uppercase;font-weight:700;letter-spacing:.07em}
 .cols3 ul{padding-left:18px;color:var(--muted);font-size:15.5px;display:flex;flex-direction:column;gap:3px}
 footer{font-family:var(--mono);font-size:13px;color:var(--muted);border-top:2px solid var(--form);padding-top:12px;display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+/* plans: three columns, each adds to the one before */
+.quick{display:grid;grid-template-columns:repeat(3,1fr);border:1.5px solid var(--form)}
+.quick div{padding:10px 12px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:2px;min-width:0}
+.quick div:last-child{border-right:0}
+.quick b{font-family:var(--display);text-transform:uppercase;letter-spacing:.06em;color:var(--form);font-size:15px}
+.quick span{font-size:15px}
+.founding{background:var(--brass-soft);border-left:4px solid var(--brass);padding:8px 12px;font-size:16px}
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.tier{border:1.5px solid var(--form);background:var(--panel);padding:14px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.tier.mid{background:var(--canary);border-color:var(--canary-line)}
+.tname{font-family:var(--display);font-weight:800;font-size:20px;text-transform:uppercase;letter-spacing:.06em;color:var(--form)}
+.tprice{font-size:34px;font-weight:700;line-height:1}
+.tprice small{font-size:15px}
+.tlabel{font-family:var(--display);font-weight:700;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--warn);margin-top:6px}
+.tier ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:15.5px}
+.tier p{font-size:15.5px}
+.tier .tname{font-size:20px}
+.tier .tprice{font-size:36px}
+.tier .tlabel{font-size:12.5px}
+.tier .tsee{font-size:15.5px}
+.tsee{font-weight:600}
+@media (max-width:760px){.tiers,.quick{grid-template-columns:1fr}.quick div{border-right:0;border-bottom:1px solid var(--line)}.quick div:last-child{border-bottom:0}}
 @media (max-width:760px){.grid2,.grid3,.demo,.steps,.ask,.lead{grid-template-columns:1fr}.lead p.big{font-size:17.5px}.ticket{transform:rotate(.8deg)}}
 @media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
 </style>
@@ -222,8 +244,8 @@ footer{font-family:var(--mono);font-size:13px;color:var(--muted);border-top:2px 
     <section class="sec" data-page="how">
       <h2>Three things you stay in charge of</h2>
       <div class="grid3">
-        <div class="item"><h3>What we see</h3><p>Pick a level: job counts only, an estimate from your average job, or real invoice totals. Every shop starts at counts only. Your customer list and your data are yours.</p></div>
-        <div class="item"><h3>Whether a robot talks</h3><p>We start with text, because most people would sooner text than talk to a machine. An AI voice is an add-on you switch on, and it always says it is automated.</p></div>
+        <div class="item"><h3>What we see</h3><p>Every plan sees your open time slots so it can book jobs. Your plan decides the money side. Catch: no dollar amounts. Catch + Dashboard: your average job price. Full: real invoice totals. Move down a plan any time. Your customer list and your data are yours.</p></div>
+        <div class="item"><h3>Whether a robot talks</h3><p>We start with text, because most people would sooner text than talk to a machine. An AI voice comes with the Full plan, you can turn it off any time, and it always says it is automated.</p></div>
         <div class="item"><h3>What gets said about price</h3><p>By default the system never talks price. If you want it to, it quotes only the fees you wrote down, in wording you approved.</p></div>
       </div>
     </section>
@@ -232,8 +254,8 @@ footer{font-family:var(--mono);font-size:13px;color:var(--muted);border-top:2px 
       <h2>How we protect your shop's data</h2>
       <p>Your customer list is the most valuable thing your shop owns. Here is exactly how we handle it. All of this is written into your service agreement too.</p>
       <div class="grid2">
-        <div class="item"><h3>Your data, your number</h3><p>Your shop gets its own private section in our system that no other shop can see. Your phone number and your customer list belong to you. If you cancel, you keep your number and we hand you a full export of your customers.</p></div>
-        <div class="item"><h3>We see as little as possible</h3><p>Every shop starts at counts only. We see dollar figures only if you choose to share them. We never take or store credit card numbers.</p></div>
+        <div class="item"><h3>Your data, your phone number</h3><p>Your shop gets its own private section in our system that no other shop can see. Your phone number and your customer list belong to you. If you cancel, you keep your phone number and we hand you a full export of your customers.</p></div>
+        <div class="item"><h3>We see as little as possible</h3><p>We only see what the system needs to do its job: your open time slots and the calls and texts that come through us. We see dollar figures only if your plan includes them. We never take or store credit card numbers.</p></div>
         <div class="item"><h3>Trusted providers only</h3><p>Messages and bookings run on well-known texting and scheduling providers that encrypt your data while it moves and while it is stored. We don't keep your customer list on our own computers.</p></div>
         <div class="item"><h3>Locked-down logins</h3><p>Every account we use has two-step login, every password lives in a business password manager, and our laptops are fully encrypted. Only the two owners have access. No outside contractors, ever.</p></div>
         <div class="item"><h3>Never sold, never shared</h3><p>We don't sell your data, share it, or mix it with another shop's. The AI tools we use are ones that don't train on your customers' messages.</p></div>
@@ -248,7 +270,7 @@ footer{font-family:var(--mono);font-size:13px;color:var(--muted);border-top:2px 
         <div class="ask"><b>Can I see the report I'd get, before I pay?</b><span>Yes. It is the demo at the top of this page.</span></div>
         <div class="ask"><b>What does it cost, in writing?</b><span>Our prices are on this page. No sales call needed to find out.</span></div>
         <div class="ask"><b>Does a robot answer my phone?</b><span>Not unless you turn that on. Text comes first.</span></div>
-        <div class="ask"><b>Who owns my phone number and customer list?</b><span>You do. If you cancel, you keep your number and get a full export of your customers.</span></div>
+        <div class="ask"><b>Who owns my phone number and customer list?</b><span>You do. If you cancel, you keep your phone number and get a full export of your customers.</span></div>
         <div class="ask"><b>Who do I call when something breaks?</b><span>One of the two owners. We set it up ourselves and we are local.</span></div>
       </div>
     </section>
@@ -261,13 +283,65 @@ footer{font-family:var(--mono);font-size:13px;color:var(--muted);border-top:2px 
 
     <section class="sec" id="pricing" data-page="pricing">
       <h2>Pricing</h2>
+      <p>Three plans. Each one adds to the one before it. Every plan sees your schedule's open and booked times so it can book jobs, plus the calls and texts that come through us. What changes is what the system does for you and how much of your money data we can see to support you.</p>
+      <p class="founding"><b>Founding shop pricing.</b> Our first 10 shops get these prices locked in for a full year.</p>
+      <div class="quick">
+        <div><b>Catch</b><span>Never lose a customer to a missed call.</span></div>
+        <div><b>Catch + Dashboard</b><span>Also know how your month is going, any time.</span></div>
+        <div><b>Full</b><span>Also get every call answered and your real sales totals.</span></div>
+      </div>
+      <div class="tiers">
+        <div class="tier">
+          <p class="tname">Catch</p>
+          <p class="tprice num">$397<small>/mo</small></p>
+          <p class="tlabel">What it does for you</p>
+          <ul>
+            <li>Every missed call gets a text back in about a minute</li>
+            <li>Emergencies go straight to your on-call tech. Small stuff waits for morning</li>
+            <li>Customers pick a time to book by text</li>
+            <li>Quotes that go quiet get followed up for you</li>
+            <li>One review request after every finished job</li>
+            <li>A one-page report on the 1st: calls caught and jobs booked</li>
+          </ul>
+          <p class="tlabel">What we can see</p>
+          <p class="tsee">Your open and booked times, so we can book jobs. The calls and texts that come through us. Never a dollar amount.</p>
+          <p class="tlabel">Good for</p>
+          <p>Owners who just want to stop losing calls.</p>
+        </div>
+        <div class="tier mid">
+          <p class="tname">Catch + Dashboard</p>
+          <p class="tprice num">$597<small>/mo</small></p>
+          <p class="tlabel">Everything in Catch, plus</p>
+          <ul>
+            <li>Your business stats on your phone any time, like calls caught, jobs booked, and how the month is going. Updated every day</li>
+            <li>This month next to last month, so you can see if you're up or down</li>
+            <li>Which job types keep you busiest</li>
+            <li>Dollar estimates based on your average job price</li>
+          </ul>
+          <p class="tlabel">What we can see</p>
+          <p class="tsee">Everything Catch sees, plus one number you give us: your average job price. We never see your invoices.</p>
+          <p class="tlabel">Good for</p>
+          <p>Owners who want to know how the month is going without digging through paperwork.</p>
+        </div>
+        <div class="tier">
+          <p class="tname">Full</p>
+          <p class="tprice num">$797<small>/mo</small></p>
+          <p class="tlabel">Everything in Catch + Dashboard, plus</p>
+          <ul>
+            <li>An AI voice answers when nobody can. It always says it's automated, and you can turn it off any time</li>
+            <li>Your dashboard shows real dollar totals from your invoices, not estimates</li>
+          </ul>
+          <p class="tlabel">What we can see</p>
+          <p class="tsee">Everything the other plans see, plus your real invoice totals, because you chose this plan. Move down a plan any time and we stop seeing them.</p>
+          <p class="tlabel">Good for</p>
+          <p>Busy shops that want every call answered and real sales totals.</p>
+        </div>
+      </div>
       <div>
-        <div class="price"><b>Setup</b><span class="amt num">$1,500</span><span class="d">One time. We build and test everything on your phone line, calendar, and Google listing.</span></div>
-        <div class="price"><b>Monthly service</b><span class="amt num">$600<small>/mo</small></span><span class="d">Text-back, booking, quote follow-up, review requests, emergency sorting, and the monthly report.</span></div>
-        <div class="price"><b>Live owner dashboard</b><span class="amt num">+$200<small>/mo</small></span><span class="d">Add-on. Your numbers on your phone, updated daily, at the privacy level you choose.</span></div>
-        <div class="price"><b>AI voice answering</b><span class="amt num">+$200<small>/mo</small></span><span class="d">Add-on. Off unless you turn it on.</span></div>
+        <div class="price"><b>Setup, any plan</b><span class="amt num">$500</span><span class="d">One time. We build and test everything on your phone line, calendar, and Google listing. Free for pilot shops that stay on after their 30 days.</span></div>
       </div>
       <ul class="rules">
+        <li>Switch plans any time. Moving down takes effect right away.</li>
         <li>No contract. Cancel with 30 days' notice.</li>
         <li>Phone number and text message fees are billed at what they cost us, with no markup.</li>
         <li><b>Guarantee:</b> if the system books no jobs in your first 30 paid days, your second month is free.</li>
@@ -283,7 +357,7 @@ footer{font-family:var(--mono);font-size:13px;color:var(--muted);border-top:2px 
           <div class="item"><h3>What you get</h3><ul class="rules"><li>Free setup and 30 days of the full monthly service</li><li>Emergencies flagged and sent to your on-call tech</li><li>A before-and-after report at the end</li></ul></div>
           <div class="item"><h3>What we ask</h3><ul class="rules"><li>30 minutes to set up</li><li>Last month's call and job counts, so we can compare</li><li>An honest testimonial if it works</li></ul></div>
         </div>
-        <p>After 30 days you keep it at the monthly price, or walk away owing nothing. You keep your number and your customer list.</p>
+        <p>After 30 days you keep it at the monthly price, or walk away owing nothing. You keep your phone number and your customer list.</p>
         <form id="pilotForm" novalidate>
           <h3 style="font-size:20px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Ask for a pilot spot</h3>
           <div class="grid2">
@@ -312,9 +386,9 @@ footer{font-family:var(--mono);font-size:13px;color:var(--muted);border-top:2px 
         <details><summary>What happens to an emergency at 2am?</summary><p>The customer is told help is on the way and your on-call tech gets a text, or a text and a call if you prefer. If he has not responded in 10 minutes, you get alerted too.</p></details>
         <details><summary>Is it OK to text my customers?</summary><p>The system texts people who called your shop first, every first message says how to opt out, and we register your business with the phone carriers before sending anything. Anyone who replies STOP is never texted again.</p></details>
         <details><summary>I already use Jobber or Housecall Pro. Does this replace it?</summary><p>No. Keep what you have. This sits in front of it and catches the calls and quotes that slip through. Tell us which one you use and we will set it up to work alongside.</p></details>
-        <details><summary>Who sees my numbers?</summary><p>You choose. At the default level we see counts, such as how many calls and jobs, and no dollar figures at all. We never share your data or use it with another shop.</p></details>
+        <details><summary>Who sees my business info, like jobs and sales?</summary><p>It depends on your plan. Catch: we see your open time slots and the calls that come through us, never dollars. Catch + Dashboard: counts plus the one average job price you give us. Full: your real invoice totals, because you chose that plan. Move down a plan and we stop seeing the extra. We never share your data or use it with another shop.</p></details>
         <details><summary>Is my customers' information safe?</summary><p>Yes. It lives in your shop's own private section with trusted providers that encrypt it, only the two owners can get in, and every login uses two-step sign-in. We never sell it or share it, and we delete our copies within 30 days if you leave. The full list is in the "How we protect your shop's data" section.</p></details>
-        <details><summary>You are a new company. Why should I trust you?</summary><p>Fair question. That is why the first two shops pay nothing until they have seen it work, why there is no contract, and why your number and customer list stay yours. If we are not earning our fee, you cancel and keep everything.</p></details>
+        <details><summary>You are a new company. Why should I trust you?</summary><p>Fair question. That is why the first two shops pay nothing until they have seen it work, why there is no contract, and why your phone number and customer list stay yours. If we are not earning our fee, you cancel and keep everything.</p></details>
       </div>
     </section>
 
@@ -435,13 +509,13 @@ footer{font-family:var(--mono);font-size:13px;color:var(--muted);border-top:2px 
     var btns=el("div","row");left.appendChild(btns);
     right.appendChild(el("p","label","2. This is what the owner sees. Choose how much money data is shown."));
     var seg=el("div","seg");seg.setAttribute("role","group");seg.setAttribute("aria-label","Privacy level");right.appendChild(seg);
-    var names=["Counts only","Average job","Real invoices"],segB=[];
+    var names=["Catch: counts only","Dashboard: average job","Full: real invoices"],segB=[];
     names.forEach(function(n,i){var b=el("button","",n);b.type="button";b.addEventListener("click",function(){level=i+1;render();});seg.appendChild(b);segB.push(b);});
     var note=el("p","sub");right.appendChild(note);
     var rep=el("div","report");right.appendChild(rep);
     var hl=el("p","label"),big=el("div","big num"),kp=el("div","kp"),bars=el("div");bars.style.cssText="display:flex;flex-direction:column;gap:7px";
     var lk=el("span","lock");lk.innerHTML='<span class="mark" aria-hidden="true"><i></i><i><svg viewBox="0 0 62 62" fill="none"><path d="M12 33 L26 46 L50 17" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg></i></span>Owner report';rep.appendChild(lk);rep.appendChild(hl);rep.appendChild(big);rep.appendChild(kp);rep.appendChild(el("p","label","Booked jobs by urgency"));rep.appendChild(bars);
-    var notes=["Counts only. We never see a dollar figure. Every shop starts here.","You give us one number, your average job ($900 here). Dollars are estimates. We never see an invoice.","Real invoice totals from your scheduling software. Only if you ask for it."];
+    var notes=["Catch plan: counts only. We never see a dollar figure.","Catch + Dashboard plan: you give us one number, your average job ($900 here). Dollars are estimates. We never see an invoice.","Full plan: real invoice totals from your scheduling software, because you chose this plan."];
     function render(){
       var add=extra.e+extra.r,rec=23+add,booked=81+add;
       segB.forEach(function(b,i){b.setAttribute("aria-pressed",String(i+1===level));});
