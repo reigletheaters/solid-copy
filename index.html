@@ -1,0 +1,499 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Solid Copy Systems</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;0,8..60,800;1,8..60,400&family=Courier+Prime:wght@400;700&display=swap">
+<style>
+/* Layout: the whole site is a carbon-copy work order book, the kind every trade shop fills out by hand.
+   White top sheet for the page, canary customer copy for the demo, pink shop copy for the pilot. Blue form ink, red serial numbers. */
+:root{
+  --bg:#f3f4ef; --panel:#ffffff; --ink:#141b2d; --muted:#4f5a70; --line:#b9c3da;
+  --form:#1b3a8c; --pipe:#1b3a8c; --warn:#c2261d; --warn-soft:#f9dedb; --brass:#b07a00; --brass-soft:#fff3a8; --good:#17693f; --good-soft:#dff0e6;
+  --canary:#fbeb8f; --canary-line:#c9a900; --pink:#f7d0d6; --pink-line:#c9788a; --on-form:#ffffff;
+  --bubble-in:#e8ebf2; --bubble-out:#1b3a8c; --bubble-out-ink:#ffffff; --cta-ink:#ffffff;
+  --logo:#f2b705;
+  --display:"Source Serif 4","Times New Roman",Georgia,serif; --body:"Source Serif 4","Times New Roman",Georgia,serif; --mono:"Courier Prime","Courier New",monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0f141d; --panel:#19212f; --ink:#e9edf6; --muted:#a3aec4; --line:#34425f;
+  --form:#8fb0ff; --pipe:#8fb0ff; --warn:#ff8273; --warn-soft:#42201c; --brass:#e9c64a; --brass-soft:#4a400f; --good:#62d39b; --good-soft:#143524;
+  --canary:#2f2a10; --canary-line:#d9bf45; --pink:#35191f; --pink-line:#e08fa0; --on-form:#0f141d;
+  --bubble-in:#263247; --bubble-out:#2d55b8; --bubble-out-ink:#ffffff; --cta-ink:#0f141d; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#0f141d; --panel:#19212f; --ink:#e9edf6; --muted:#a3aec4; --line:#34425f;
+  --form:#8fb0ff; --pipe:#8fb0ff; --warn:#ff8273; --warn-soft:#42201c; --brass:#e9c64a; --brass-soft:#4a400f; --good:#62d39b; --good-soft:#143524;
+  --canary:#2f2a10; --canary-line:#d9bf45; --pink:#35191f; --pink-line:#e08fa0; --on-form:#0f141d;
+  --bubble-in:#263247; --bubble-out:#2d55b8; --bubble-out-ink:#ffffff; --cta-ink:#0f141d; color-scheme:dark }
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.5;padding-inline:16px;padding-block:0 56px}
+.wrap{max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+h1,h2,h3,p,ul,ol{margin:0}
+h1,h2,h3{font-family:var(--display);text-wrap:balance}
+.num,.val{font-family:var(--mono);font-variant-numeric:tabular-nums}
+a{color:var(--form)}
+.label{font-family:var(--display);font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--form);font-weight:700}
+.sub{color:var(--muted);font-size:15px}
+:focus-visible{outline:3px solid var(--form);outline-offset:2px}
+/* top bar: the brand is a rubber stamp */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:space-between;align-items:center;padding-block:10px;border-bottom:2px solid var(--form)}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--body);font-weight:800;font-size:21px;text-transform:uppercase;letter-spacing:.02em;background:none;border:0;color:var(--ink);padding:0;cursor:pointer}
+.mark{position:relative;width:34px;height:34px;flex:none}
+.mark i{position:absolute;width:27px;height:27px;border-radius:5px}
+.mark i:first-child{left:7px;top:7px;background:var(--logo)}
+.mark i:last-child{left:0;top:0;background:var(--ink);display:flex;align-items:center;justify-content:center}
+.mark svg{width:17px;height:17px}
+.mark path{stroke:var(--bg)}
+.report .mark path,.sec .mark path{stroke:var(--panel)}
+.pilot .mark path{stroke:var(--pink)}
+.topbar nav{display:flex;flex-wrap:wrap;gap:4px 16px}
+.topbar nav a{color:var(--ink);text-decoration:none;font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:.08em;text-transform:uppercase;padding-bottom:2px}
+.topbar nav a:hover{color:var(--form)}
+.topbar nav a[aria-current="page"]{color:var(--form);box-shadow:0 3px 0 var(--form)}
+.view{display:flex;flex-direction:column;gap:28px}
+/* hero: headline beside a filled-in ticket */
+.lead{display:grid;grid-template-columns:1.15fr .85fr;gap:26px;align-items:center;padding-top:10px}
+.lead>div{display:flex;flex-direction:column;gap:14px;min-width:0}
+.lead h1{font-size:clamp(38px,8.4vw,70px);line-height:.98;font-weight:700;text-transform:uppercase;letter-spacing:-.01em}
+.lead h1 em{font-style:normal;color:var(--form)}
+.lead p.big{font-size:18.5px;max-width:52ch}
+.ticket{background:var(--canary);border:1px solid var(--canary-line);padding:22px 16px 14px;position:relative;transform:rotate(1.4deg);font-family:var(--mono);font-size:14.5px;box-shadow:5px 6px 0 var(--pink),5px 6px 0 1px var(--pink-line);max-width:380px;justify-self:center;width:100%}
+.ticket::before{content:"";position:absolute;left:0;right:0;top:7px;height:6px;background:radial-gradient(circle,var(--bg) 2.6px,transparent 3px) 0 0/14px 6px repeat-x}
+.ticket .th{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid var(--form);padding-bottom:4px;margin-bottom:4px}
+.ticket .th b{font-family:var(--display);font-size:17px;letter-spacing:.12em;color:var(--form)}
+.ticket .th span{color:var(--ink);font-weight:700}
+.ticket dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:0 10px}
+.ticket dt{font-family:var(--display);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--form);padding-block:6px 4px;border-bottom:1px solid var(--canary-line);display:flex;align-items:flex-end}
+.ticket dd{margin:0;padding-block:6px 4px;border-bottom:1px solid var(--canary-line);color:var(--ink);display:flex;align-items:flex-end;line-height:1.25}
+.lock{display:inline-flex;align-items:center;gap:8px;font-family:var(--body);font-weight:800;font-size:15px;letter-spacing:.02em;text-transform:uppercase;color:var(--ink)}
+.lock .mark{transform:scale(.72);transform-origin:left center;margin-right:-9px}
+.ticket .lock{position:absolute;right:14px;bottom:12px}
+.ticket .mark path{stroke:var(--canary)}
+.ticket small{display:block;margin-top:14px;max-width:52%;min-height:34px;font-family:var(--body);font-size:12px;color:var(--muted)}
+.cta{display:inline-block;align-self:flex-start;background:var(--form);color:var(--cta-ink);font:700 16px var(--display);letter-spacing:.1em;text-transform:uppercase;padding:13px 22px;border-radius:2px;text-decoration:none;border:0;cursor:pointer;box-shadow:3px 3px 0 var(--ink)}
+.cta:hover{transform:translate(1px,1px);box-shadow:2px 2px 0 var(--ink)}
+.ghost{display:inline-block;background:var(--panel);color:var(--form);border:2px solid var(--form);font:700 14.5px var(--display);letter-spacing:.08em;text-transform:uppercase;padding:9px 14px;border-radius:2px;cursor:pointer;text-decoration:none}
+.ghost:hover{background:var(--form);color:var(--on-form)}
+.ghost:disabled{opacity:.5;cursor:default}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+/* sections are boxes on a printed form: a blue header band and a ruled body */
+.sec{display:flex;flex-direction:column;gap:14px;background:var(--panel);border:1.5px solid var(--form);padding:0 16px 18px;scroll-margin-top:70px}
+.sec>h2{font-size:20px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;line-height:1.2;background:var(--form);color:var(--on-form);margin-inline:-16px;padding:7px 16px}
+.sec>p{max-width:62ch}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:0 28px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:0 24px}
+.item{display:flex;flex-direction:column;gap:3px;min-width:0;border-top:1px solid var(--line);padding-block:12px}
+.item h3{font-size:18px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--form)}
+.item p{color:var(--muted);font-size:15.5px}
+.rules{padding-left:20px;display:flex;flex-direction:column;gap:6px;max-width:62ch}
+/* demo = the canary customer copy */
+.demo{background:var(--canary);border:1px solid var(--canary-line);padding:26px 16px 16px;display:grid;grid-template-columns:1fr 1fr;gap:20px;min-width:0;scroll-margin-top:70px;position:relative}
+.demo::before{content:"";position:absolute;left:0;right:0;top:9px;height:6px;background:radial-gradient(circle,var(--bg) 2.6px,transparent 3px) 0 0/14px 6px repeat-x}
+.demo>div{display:flex;flex-direction:column;gap:12px;min-width:0}
+.sample{font-family:var(--mono);background:var(--panel);border:1.5px dashed var(--form);color:var(--form);padding:3px 9px;font-size:13px;font-weight:700;border-radius:2px;align-self:flex-start}
+.phone{background:var(--panel);border:1.5px solid var(--ink);border-radius:18px;padding:12px;display:flex;flex-direction:column;gap:8px;min-height:300px}
+.msg{max-width:88%;padding:8px 12px;border-radius:14px;font-size:14.5px;line-height:1.35}
+.msg.in{background:var(--bubble-in);align-self:flex-start;border-bottom-left-radius:4px}
+.msg.out{background:var(--bubble-out);color:var(--bubble-out-ink);align-self:flex-end;border-bottom-right-radius:4px}
+.sys{align-self:center;font-family:var(--mono);font-size:12.5px;color:var(--muted);text-align:center}
+.sys.hot{color:var(--warn);font-weight:700}.sys.done{color:var(--good);font-weight:700}
+.seg{display:flex;flex-wrap:wrap;border:2px solid var(--form);border-radius:2px;overflow:hidden;align-self:flex-start;background:var(--panel)}
+.seg button{background:var(--panel);color:var(--form);border:0;border-right:2px solid var(--form);padding:7px 11px;font:700 13.5px var(--display);letter-spacing:.07em;text-transform:uppercase;cursor:pointer}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--form);color:var(--on-form)}
+.report{background:var(--panel);border:1.5px solid var(--form);padding:14px;display:flex;flex-direction:column;gap:10px}
+.report .big{font-family:var(--body);font-size:clamp(48px,13vw,68px);font-weight:800;line-height:.95;letter-spacing:-.03em;color:var(--good);display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.report .big small{font-family:var(--display);font-size:.3em;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.kp{display:grid;grid-template-columns:repeat(3,1fr);border-block:1.5px solid var(--form)}
+.kp div{padding:8px 6px;border-right:1px solid var(--line)}.kp div:last-child{border-right:0}
+.kp .label{font-size:11px;letter-spacing:.08em}
+.kp .num{font-size:24px;font-weight:700;line-height:1.15}
+.bar{display:grid;grid-template-columns:88px 1fr 30px;gap:8px;align-items:center;font-size:14px}
+.track{height:13px;background:var(--bg);border:1px solid var(--line)}.fill{height:100%;background:var(--form)}
+.fill.e{background:var(--warn)}.fill.s{background:var(--brass)}
+.bar .val{text-align:right;font-weight:700}
+.steps{list-style:none;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:0 24px;counter-reset:s}
+.steps li{counter-increment:s;display:flex;flex-direction:column;gap:4px;padding-block:6px}
+.steps li::before{content:"No. 0" counter(s);font-family:var(--mono);font-size:22px;font-weight:700;color:var(--ink)}
+.steps h3{font-size:19px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--form)}
+.steps p{color:var(--muted);font-size:15.5px}
+.ask{display:grid;grid-template-columns:1fr 1fr;gap:4px 24px;border-top:1px solid var(--line);padding-block:11px}
+.ask b{font-weight:600}.ask span{font-family:var(--mono);font-size:15.5px}
+.trade{border-top:1px solid var(--line);padding-block:14px;display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.trade h3{font-size:22px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--form)}
+.soon{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--form);border:1.5px dashed var(--form);border-radius:2px;padding:1px 8px}
+/* pricing reads like the line items on an invoice */
+.price{display:grid;grid-template-columns:1fr auto;gap:2px 20px;border-top:1px solid var(--line);padding-block:11px;align-items:baseline;max-width:720px}
+.price b{font-family:var(--display);font-size:18px;text-transform:uppercase;letter-spacing:.07em;color:var(--form)}
+.price .amt{font-family:var(--mono);font-size:26px;font-weight:700;white-space:nowrap}
+.price .amt small{font-size:15px}
+.price span.d{grid-column:1/-1;color:var(--muted);font-size:15.5px}
+/* pilot = the pink shop copy */
+.pilot{background:var(--pink);border:1px solid var(--pink-line);padding:18px 16px;display:flex;flex-direction:column;gap:14px}
+.pilot .item{border-top-color:var(--pink-line)}
+.pilot .item h3,.pilot form h3{color:var(--ink)}
+.field{display:flex;flex-direction:column;gap:3px;min-width:0;padding-block:6px}
+.field label{font-family:var(--display);font-weight:700;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--form)}
+input[type=text],input[type=tel],select,textarea{font:16px var(--mono);color:var(--ink);background:var(--panel);border:0;border-bottom:2px solid var(--form);border-radius:0;padding:9px 8px;width:100%}
+textarea{min-height:120px;border:1.5px solid var(--form)}
+.err{color:var(--ink);font-weight:700;font-size:14.5px;border-left:4px solid var(--form);padding-left:8px}
+.ok{color:var(--good);font-weight:700;font-size:14.5px}
+details{border-top:1px solid var(--line);padding-block:11px;max-width:720px}
+summary{font-weight:600;cursor:pointer;font-size:17px}
+details[open] summary{color:var(--form)}
+details p{margin-top:8px;color:var(--muted)}
+.todo{background:var(--brass-soft);padding:1px 8px;font-family:var(--mono);font-weight:700}
+.contact{font-family:var(--mono);font-size:19px;display:flex;flex-direction:column;gap:6px}
+.sel{user-select:all}
+.cols3 h3{font-size:18px;text-transform:uppercase;font-weight:700;letter-spacing:.07em}
+.cols3 ul{padding-left:18px;color:var(--muted);font-size:15.5px;display:flex;flex-direction:column;gap:3px}
+footer{font-family:var(--mono);font-size:13px;color:var(--muted);border-top:2px solid var(--form);padding-top:12px;display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+@media (max-width:760px){.grid2,.grid3,.demo,.steps,.ask,.lead{grid-template-columns:1fr}.lead p.big{font-size:17.5px}.ticket{transform:rotate(.8deg)}}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+</style>
+
+<div class="wrap">
+  <div class="topbar">
+    <button class="brand" type="button" data-nav="home" aria-label="Solid Copy Systems, home"><span class="mark" aria-hidden="true"><i></i><i><svg viewBox="0 0 62 62" fill="none"><path d="M12 33 L26 46 L50 17" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg></i></span>Solid Copy</button>
+    <nav aria-label="Site">
+      <a href="#trades" data-nav="trades">Trades</a>
+      <a href="#how" data-nav="how">How it works</a>
+      <a href="#pricing" data-nav="pricing">Pricing</a>
+      <a href="#data" data-nav="data">Your data</a>
+      <a href="#pilot" data-nav="pilot">Free pilot</a>
+      <a href="#faq" data-nav="faq">Questions</a>
+      <a href="#contact" data-nav="contact">Contact</a>
+    </nav>
+  </div>
+
+  <!-- ================= HOME ================= -->
+  <main class="view" id="v-home">
+    <section class="lead" data-page="home">
+      <div>
+        <p class="label">Veteran-owned · Orange County, California</p>
+        <h1>You miss a call. We text them back in a minute <em>and book the job.</em></h1>
+        <p class="big">For plumbers, heating and air techs, electricians, and any service business where the owner is also the one doing the work. Your phone rings like it always has. We catch the calls you can't get to, sort the emergencies from the drips, and show you each month what it brought in.</p>
+        <div class="row"><a class="cta" href="#demo" data-nav="demo">Watch it happen</a><span class="sub">Takes 20 seconds. Nothing to sign up for.</span></div>
+      </div>
+      <div class="ticket">
+        <div class="th"><b>MISSED CALL TICKET</b><span>No. 000142</span></div>
+        <dl>
+          <dt>Call came in</dt><dd>6:14 PM</dd>
+          <dt>Answered</dt><dd>No. Tech on a job.</dd>
+          <dt>Text sent</dt><dd>6:15 PM</dd>
+          <dt>Customer said</dt><dd>"Water heater burst"</dd>
+          <dt>Sorted as</dt><dd>EMERGENCY</dd>
+          <dt>On-call alerted</dt><dd>6:15 PM</dd>
+          <dt>Result</dt><dd>Booked tonight</dd>
+        </dl>
+        <span class="lock"><span class="mark" aria-hidden="true"><i></i><i><svg viewBox="0 0 62 62" fill="none"><path d="M12 33 L26 46 L50 17" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg></i></span>Solid Copy</span>
+        <small>Sample ticket. The live version is right below.</small>
+      </div>
+    </section>
+
+    <div id="demoHome" data-page="home"></div>
+
+    <section class="sec" id="how" data-page="how">
+      <h2>How it works</h2>
+      <ol class="steps">
+        <li><h3>We set it up</h3><p>We come to your shop and connect it to the number your customers already call. It takes about 30 minutes of your time. You read and approve every message before anything goes out.</p></li>
+        <li><h3>It catches what you miss</h3><p>A missed call gets a text within a minute. Two quick questions sort it: emergencies alert your on-call tech, everything else goes to your calendar.</p></li>
+        <li><h3>You see what it brought in</h3><p>On the 1st of each month you get a one-page report: calls caught, jobs booked, quotes that need your call. We walk you through it in five minutes.</p></li>
+      </ol>
+    </section>
+
+    <section class="sec" data-page="how">
+      <h2>What it does</h2>
+      <div class="grid2">
+        <div class="item"><h3>Missed-call text-back</h3><p>Nobody picks up, the caller gets a text from your shop asking what they need.</p></div>
+        <div class="item"><h3>Booking</h3><p>Customers pick an open slot by text or from a link on your website and Google listing.</p></div>
+        <div class="item"><h3>Quote follow-up</h3><p>Quotes that go quiet get a text on day 2, day 5, and day 10. After that you get a short list to call.</p></div>
+        <div class="item"><h3>Review requests</h3><p>Every finished job gets one polite request for a Google review. One, not five.</p></div>
+        <div class="item"><h3>Emergency sorting</h3><p>Emergencies reach you or your on-call tech right away, any hour. Routine jobs wait for morning so you can sleep.</p></div>
+        <div class="item"><h3>Safety rule</h3><p>Anyone who mentions a gas smell, sparks, or smoke is told to get out and call 911. The system never tries to book that one.</p></div>
+      </div>
+    </section>
+
+    <section class="sec" data-page="how">
+      <h2>Three things you stay in charge of</h2>
+      <div class="grid3">
+        <div class="item"><h3>What we see</h3><p>Pick a level: job counts only, an estimate from your average job, or real invoice totals. Every shop starts at counts only. The account is in your shop's name and the data is yours.</p></div>
+        <div class="item"><h3>Whether a robot talks</h3><p>We start with text, because most people would sooner text than talk to a machine. An AI voice is an add-on you switch on, and it always says it is automated.</p></div>
+        <div class="item"><h3>What gets said about price</h3><p>By default the system never talks price. If you want it to, it quotes only the fees you wrote down, in wording you approved.</p></div>
+      </div>
+    </section>
+
+    <section class="sec" id="data" data-page="home how data">
+      <h2>How we protect your shop's data</h2>
+      <p>Your customer list is the most valuable thing your shop owns. Here is exactly how we handle it. All of this is written into your service agreement too.</p>
+      <div class="grid2">
+        <div class="item"><h3>Your accounts, your keys</h3><p>The texting and scheduling accounts are set up in your shop's name. You give us access, and you can turn it off any time. If you cancel, you keep everything.</p></div>
+        <div class="item"><h3>We see as little as possible</h3><p>Every shop starts at counts only. We see dollar figures only if you choose to share them. We never take or store credit card numbers.</p></div>
+        <div class="item"><h3>Trusted providers only</h3><p>Messages and bookings run on well-known texting and scheduling providers that encrypt your data while it moves and while it is stored. We don't keep your customer list on our own computers.</p></div>
+        <div class="item"><h3>Locked-down logins</h3><p>Every account we use has two-step login, every password lives in a business password manager, and our laptops are fully encrypted. Only the two owners have access. No outside contractors, ever.</p></div>
+        <div class="item"><h3>Never sold, never shared</h3><p>We don't sell your data, share it, or mix it with another shop's. The AI tools we use are ones that don't train on your customers' messages.</p></div>
+        <div class="item"><h3>Gone when you say so</h3><p>Cancel and we delete our copies within 30 days. Want an export first? We hand it over. If anything ever goes wrong, you hear from us directly, in writing, right away.</p></div>
+      </div>
+    </section>
+
+    <section class="sec" data-page="faq">
+      <h2>Ask anyone selling this</h2>
+      <p>You have probably heard this pitch before. Here are five questions worth asking whoever you talk to, and our answers.</p>
+      <div>
+        <div class="ask"><b>Can I see the report I'd get, before I pay?</b><span>Yes. It is the demo at the top of this page.</span></div>
+        <div class="ask"><b>What does it cost, in writing?</b><span>Our prices are on this page. No sales call needed to find out.</span></div>
+        <div class="ask"><b>Does a robot answer my phone?</b><span>Not unless you turn that on. Text comes first.</span></div>
+        <div class="ask"><b>Who owns the account and my customer list?</b><span>You do. If you cancel, you keep both.</span></div>
+        <div class="ask"><b>Who do I call when something breaks?</b><span>One of the two owners. We set it up ourselves and we are local.</span></div>
+      </div>
+    </section>
+
+    <section class="sec" id="trades" data-page="trades">
+      <h2>Set up for your trade</h2>
+      <p>Any service business that lives on the phone can use this. Each trade gets its own emergency questions, job types, and wording, so it sounds like your shop and not a call center.</p>
+      <div class="grid2" id="tradeCards"></div>
+    </section>
+
+    <section class="sec" id="pricing" data-page="pricing">
+      <h2>Pricing</h2>
+      <div>
+        <div class="price"><b>Setup</b><span class="amt num">$1,500</span><span class="d">One time. We build and test everything on your phone line, calendar, and Google listing.</span></div>
+        <div class="price"><b>Monthly service</b><span class="amt num">$600<small>/mo</small></span><span class="d">Text-back, booking, quote follow-up, review requests, emergency sorting, and the monthly report.</span></div>
+        <div class="price"><b>Live owner dashboard</b><span class="amt num">+$200<small>/mo</small></span><span class="d">Add-on. Your numbers on your phone, updated daily, at the privacy level you choose.</span></div>
+        <div class="price"><b>AI voice answering</b><span class="amt num">+$200<small>/mo</small></span><span class="d">Add-on. Off unless you turn it on.</span></div>
+      </div>
+      <ul class="rules">
+        <li>No contract. Cancel with 30 days' notice.</li>
+        <li>Phone number and text message fees are billed at what they cost us, with no markup.</li>
+        <li><b>Guarantee:</b> if the system books no jobs in your first 30 paid days, your second month is free.</li>
+      </ul>
+    </section>
+
+    <section class="sec" id="pilot" data-page="pilot">
+      <h2>Free 30-day pilot</h2>
+      <p>We are a new company, so we are proving it before we ask anyone to pay. Our first two shops get setup and 30 days free.</p>
+      <div class="pilot">
+        <span class="lock"><span class="mark" aria-hidden="true"><i></i><i><svg viewBox="0 0 62 62" fill="none"><path d="M12 33 L26 46 L50 17" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg></i></span>Solid Copy pilot</span>
+        <div class="grid2">
+          <div class="item"><h3>What you get</h3><ul class="rules"><li>Free setup and 30 days of the full monthly service</li><li>Emergencies flagged and sent to your on-call tech</li><li>A before-and-after report at the end</li></ul></div>
+          <div class="item"><h3>What we ask</h3><ul class="rules"><li>30 minutes to set up</li><li>Last month's call and job counts, so we can compare</li><li>An honest testimonial if it works</li></ul></div>
+        </div>
+        <p>After 30 days you keep it at the monthly price, or walk away owing nothing and keep your account.</p>
+        <form id="pilotForm" novalidate>
+          <h3 style="font-size:20px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Ask for a pilot spot</h3>
+          <div class="grid2">
+            <div class="field"><label for="pName">Your name</label><input type="text" id="pName" autocomplete="name"></div>
+            <div class="field"><label for="pShop">Shop name</label><input type="text" id="pShop" autocomplete="organization"></div>
+            <div class="field"><label for="pPhone">Best number to reach you</label><input type="tel" id="pPhone" autocomplete="tel"></div>
+            <div class="field"><label for="pTime">Best time to stop by</label><select id="pTime"><option>Before 8am</option><option>Lunch</option><option>After 4pm</option><option>Saturday</option></select></div>
+          </div>
+          <div class="row" style="margin-top:14px"><button class="cta" type="submit">Write my request</button><span class="err" id="pErr" hidden></span></div>
+        </form>
+        <div id="pOut" hidden style="display:flex;flex-direction:column;gap:10px">
+          <p><b>Your request is ready.</b> This page cannot send it for you. Copy it and email it to us.</p>
+          <textarea id="pText" readonly aria-label="Your pilot request"></textarea>
+          <div class="row"><button class="ghost" type="button" id="pCopy">Copy the message</button><span class="ok" id="pCopied" hidden>Copied.</span></div>
+          <p>Send it to: <span class="sel"><b>solidcopysystems@gmail.com</b></span></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="faq" data-page="faq">
+      <h2>Straight answers</h2>
+      <div>
+        <details><summary>Do I have to change my phone number?</summary><p>No. Customers keep calling the number they know. We set that number to pass missed calls to the system, and we check that your phone carrier supports it before we start.</p></details>
+        <details><summary>Will my customers know it is automated?</summary><p>The first text reads like your office wrote it, because you approved the wording. If a customer asks something the system is not sure about, it stops and your office gets the message to answer by hand.</p></details>
+        <details><summary>What if it gets something wrong?</summary><p>It asks customers to answer with a number, so there is little to misread. It never guesses a price and never books a gas, smoke, or sparks call. Anything unclear goes to a person.</p></details>
+        <details><summary>What happens to an emergency at 2am?</summary><p>The customer is told help is on the way and your on-call tech gets a text, or a text and a call if you prefer. If he has not responded in 10 minutes, you get alerted too.</p></details>
+        <details><summary>Is it OK to text my customers?</summary><p>The system texts people who called your shop first, every first message says how to opt out, and we register your business with the phone carriers before sending anything. Anyone who replies STOP is never texted again.</p></details>
+        <details><summary>I already use Jobber or Housecall Pro. Does this replace it?</summary><p>No. Keep what you have. This sits in front of it and catches the calls and quotes that slip through. Tell us which one you use and we will set it up to work alongside.</p></details>
+        <details><summary>Who sees my numbers?</summary><p>You choose. At the default level we see counts, such as how many calls and jobs, and no dollar figures at all. We never share your data or use it with another shop.</p></details>
+        <details><summary>Is my customers' information safe?</summary><p>Yes. It lives in accounts under your shop's name with trusted providers that encrypt it, only the two owners can get in, and every login uses two-step sign-in. We never sell it or share it, and we delete our copies within 30 days if you leave. The full list is in the "How we protect your shop's data" section.</p></details>
+        <details><summary>You are a new company. Why should I trust you?</summary><p>Fair question. That is why the first two shops pay nothing until they have seen it work, why there is no contract, and why the account stays in your name. If we are not earning our fee, you cancel and keep everything.</p></details>
+      </div>
+    </section>
+
+    <section class="sec" data-page="contact">
+      <h2>Veteran-owned</h2>
+      <p>"Solid copy" is radio talk for "message received." That is the whole job: every customer who reaches out to your shop gets heard.</p>
+      <div class="grid2">
+        <div class="item"><h3>Andrew</h3><p>Air Force veteran. Six years in Security Forces as a Staff Sergeant and unit trainer. Finishing a Computer Science degree with a Data Analytics minor at Chapman University. Builds and runs the systems.</p></div>
+        <div class="item"><h3>Co-owner</h3><p>Fellow veteran and 50/50 co-owner of Solid Copy Systems.</p></div>
+      </div>
+    </section>
+
+    <section class="sec" id="contact" data-page="contact">
+      <h2>Contact</h2>
+      <p>Email us and we will come by before your crews roll out.</p>
+      <div class="contact"><span>Email: <span class="sel">solidcopysystems@gmail.com</span></span></div>
+      <p class="sub">Serving Orange County, including Irvine, Santa Ana, Anaheim, Tustin, Costa Mesa, and Huntington Beach.</p>
+    </section>
+    <section class="sec" data-page="home">
+      <h2>Where to next</h2>
+      <div class="row"><a class="ghost" href="#trades" data-nav="trades">Find your trade</a><a class="ghost" href="#how" data-nav="how">How it works</a><a class="ghost" href="#pricing" data-nav="pricing">Pricing</a><a class="cta" href="#pilot" data-nav="pilot">Ask for a pilot spot</a></div>
+    </section>
+    <section class="sec" data-page="trades how pricing data faq contact">
+      <h2>Want to try it free?</h2>
+      <p>Our first two shops get setup and 30 days at no cost.</p>
+      <div class="row"><a class="cta" href="#pilot" data-nav="pilot">Ask for a pilot spot</a><a class="ghost" href="#home" data-nav="home">Back to the demo</a></div>
+    </section>
+  </main>
+
+  <!-- ================= TRADE PAGE (filled from TRADES) ================= -->
+  <main class="view" id="v-trade" hidden>
+    <section class="lead" style="grid-template-columns:1fr">
+      <div><p class="label" id="tLabel"></p>
+      <h1 id="tH1"></h1>
+      <p class="big" id="tSub"></p>
+      <div class="row"><a class="cta" href="#demo" data-nav="demo">Watch it happen</a><a class="ghost" href="#pilot" data-nav="pilot">Ask for a pilot spot</a></div></div>
+    </section>
+    <div id="demoTrade"></div>
+    <section class="sec">
+      <h2 id="tSortH"></h2>
+      <p>Two quick questions sort every request. You decide who gets woken up and for what.</p>
+      <div class="grid3 cols3">
+        <div class="item"><h3 style="color:var(--warn)">Emergency</h3><ul id="tE"></ul><p>On-call tech alerted right away, any hour.</p></div>
+        <div class="item"><h3 style="color:var(--brass)">Same-day</h3><ul id="tS"></ul><p>Offered today's open slots.</p></div>
+        <div class="item"><h3>Routine</h3><ul id="tR"></ul><p>Booked on the calendar. Nobody's phone goes off at night.</p></div>
+      </div>
+      <p><b>Safety rule:</b> <span id="tSafety"></span></p>
+    </section>
+    <section class="sec">
+      <h2>What your month looks like</h2>
+      <p id="tMonth"></p>
+      <ul class="rules" id="tList"></ul>
+    </section>
+    <section class="sec">
+      <h2>Next step</h2>
+      <p>Pricing, the free pilot, and answers to common questions are on the main page.</p>
+      <div class="row"><a class="cta" href="#pilot" data-nav="pilot">Ask for a pilot spot</a><a class="ghost" href="#pricing" data-nav="pricing">See pricing</a></div>
+    </section>
+  </main>
+
+  <footer><span class="lock"><span class="mark" aria-hidden="true"><i></i><i><svg viewBox="0 0 62 62" fill="none"><path d="M12 33 L26 46 L50 17" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg></i></span>Solid Copy Systems</span><span>Orange County, CA · The demo on this site uses sample data for a made-up shop and sends no messages.</span></footer>
+</div>
+
+<script>
+(function(){
+  /* To add a trade: add one entry here and set live:true. Nothing else in the site changes. */
+  var HI="Hi, this is SHOP. Sorry we missed your call. What can we help with? Reply here and we'll get you taken care of. Reply STOP to opt out.";
+  function sims(shop,e,r){function hi(){return HI.replace("SHOP",shop);}
+    return {e:{btn:e.btn,steps:[["sys",e.t+" · Missed call from (949) 555-0142"],["in",hi()],["out",e.says],["in",e.reply],["sys hot","Tagged EMERGENCY · on-call tech alerted"],["sys done",e.end]]},
+            r:{btn:r.btn,steps:[["sys",r.t+" · Missed call from (714) 555-0188"],["in",hi()],["out",r.says],["in","Got it. One quick question so we send the right help. Reply with a number: "+r.q],["out","3"],["in","Happy to help. Pick a day and time that works for you: harborline.example/book"],["sys done",r.end]]}};}
+  var TRADES={
+    plumbing:{live:true,name:"Plumbing",shop:"Harbor Line Plumbing",blurb:"Burst pipes, water heaters, drains, and repipes.",amt:{e:1850,r:310},
+      h1:"Built for plumbing shops.",sub:"A burst pipe will not wait for a callback. When you are under a sink and the phone rings, the customer gets a text in a minute, the emergency gets to your on-call tech, and the dripping faucet waits for morning.",
+      sortH:"How plumbing calls get sorted",
+      E:["Burst or gushing pipe","Sewage backing up","Flooding","No water to the house"],S:["No hot water","Main drain clogged","Toilet won't flush"],R:["Dripping faucet","Running toilet","Quote for a remodel or repipe"],
+      month:"A one-page report on the 1st, built around how a plumbing shop makes money.",
+      list:["Missed calls caught and how many turned into jobs","Emergencies, same-day, and routine jobs counted separately","Jobs by type: water heaters, drains, leaks, repipes, fixtures","Open quotes past day 10 that need your call","New Google reviews and your rating"],
+      sims:sims("Harbor Line Plumbing",
+        {btn:"Burst pipe at 6pm",t:"6:14 PM",says:"Water heater burst and it's flooding my garage",reply:"That sounds urgent. I'm alerting our on-call tech now and he will call you within 15 minutes. If you can reach your main water shutoff safely, turn it off.",end:"Mike called back at 6:21 PM · job booked for tonight"},
+        {btn:"Dripping faucet at 9pm",t:"9:02 PM",says:"My kitchen faucet keeps dripping",q:"1 = water is leaking or backing up right now. 2 = I need someone today. 3 = it can wait a day or two.",end:"Booked for Thursday 10 AM · nobody got woken up"})},
+    hvac:{live:true,name:"Heating and air",shop:"Harbor Line Heating & Air",blurb:"No cooling, no heat, and tune-up season.",amt:{e:640,r:189},
+      h1:"Built for heating and air shops.",sub:"When the AC quits in a heat wave, the first shop to answer gets the job. If you are in an attic and can't pick up, the customer gets a text in a minute, the urgent calls reach your on-call tech, and the tune-ups go on the calendar.",
+      sortH:"How heating and air calls get sorted",
+      E:["No cooling in extreme heat","No heat on a cold night","Water leaking from the unit","Anyone elderly, sick, or an infant in the home"],S:["System not keeping up","Thermostat dead","Loud noise from the unit"],R:["Seasonal tune-up","Filter and maintenance plan","Quote for a new system"],
+      month:"A one-page report on the 1st, built around how a heating and air shop makes money.",
+      list:["Missed calls caught and how many turned into jobs","Emergencies, same-day, and routine jobs counted separately","Jobs by type: repairs, tune-ups, installs","Open install quotes past day 10 that need your call","New Google reviews and your rating"],
+      sims:sims("Harbor Line Heating & Air",
+        {btn:"AC out in a heat wave",t:"4:40 PM",says:"AC just died, it's 98 out and I have a newborn in the house",reply:"That sounds urgent. I'm alerting our on-call tech now and he will call you within 15 minutes. Close the blinds and keep everyone in the coolest room until he calls.",end:"Dana called back at 4:47 PM · tech on site by 6 PM"},
+        {btn:"Tune-up request at 8pm",t:"8:15 PM",says:"I'd like to get my AC serviced before summer",q:"1 = no cooling or heat right now. 2 = I need someone today. 3 = it can wait a day or two.",end:"Tune-up booked for Tuesday 9 AM · nobody got woken up"})},
+    electrical:{live:true,name:"Electrical",shop:"Harbor Line Electric",blurb:"Outages, panels, and service calls.",amt:{e:480,r:260},
+      h1:"Built for electrical shops.",sub:"A house with no power calls every electrician on the first page until someone answers. If you are on a ladder, the customer gets a text in a minute, the outage reaches your on-call tech, and the ceiling fan install waits for a weekday.",
+      sortH:"How electrical calls get sorted",
+      E:["Power out in part or all of the house","Breaker that won't reset","Outlet or panel that is hot to the touch"],S:["Outlets not working","Lights flickering","EV charger down"],R:["Fixture or fan install","Panel upgrade quote","Adding outlets or circuits"],
+      month:"A one-page report on the 1st, built around how an electrical shop makes money.",
+      list:["Missed calls caught and how many turned into jobs","Emergencies, same-day, and routine jobs counted separately","Jobs by type: service calls, panels, installs","Open quotes past day 10 that need your call","New Google reviews and your rating"],
+      safety:"Anyone who mentions sparks, smoke, or a burning smell is told to get out and call 911. The system never tries to book that one.",
+      sims:sims("Harbor Line Electric",
+        {btn:"Half the house lost power",t:"7:05 PM",says:"Half my house just lost power and the breaker won't reset",reply:"That sounds urgent. I'm alerting our on-call tech now and he will call you within 15 minutes. Leave the breaker off until he calls.",end:"Chris called back at 7:11 PM · job booked for tonight"},
+        {btn:"Ceiling fan install",t:"8:30 PM",says:"Looking to get two ceiling fans installed",q:"1 = power is out or something is hot or sparking. 2 = I need someone today. 3 = it can wait a day or two.",end:"Booked for Friday 1 PM · nobody got woken up"})},
+    other:{live:false,name:"Something else?",blurb:"Roofing, garage doors, locksmiths, pest control, appliance repair, and more. If your customers call and you can't always pick up, it works the same way.",soon:"Ask us"}
+  };
+  var $=function(id){return document.getElementById(id);},reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function el(tag,cls,t){var e=document.createElement(tag);if(cls)e.className=cls;if(t!==undefined)e.textContent=t;return e;}
+  function money(n){return "$"+n.toLocaleString("en-US");}
+
+  /* ---------- demo component ---------- */
+  function mountDemo(host,key,choose){
+    var T=TRADES[key],level=1,extra={e:0,r:0},busy=false;
+    host.textContent="";
+    var box=el("section","demo");box.id="demo";host.appendChild(box);
+    var left=el("div"),right=el("div");box.appendChild(left);box.appendChild(right);
+    if(choose){var pick=el("div","seg");pick.setAttribute("role","group");pick.setAttribute("aria-label","Pick a trade");
+      Object.keys(TRADES).forEach(function(k){if(!TRADES[k].live)return;var pb=el("button","",TRADES[k].name);pb.type="button";pb.setAttribute("aria-pressed",String(k===key));pb.addEventListener("click",function(){mountDemo(host,k,true);});pick.appendChild(pb);});
+      var pw=el("div");pw.style.cssText="grid-column:1/-1;display:flex;flex-direction:column;gap:6px";pw.appendChild(el("p","label","Pick your trade"));pw.appendChild(pick);box.insertBefore(pw,left);}
+    left.appendChild(el("span","sample","Sample data. "+T.shop+" is a made-up shop."));
+    left.appendChild(el("p","label","1. Press a button. This is the customer's phone."));
+    var phone=el("div","phone");phone.setAttribute("aria-live","polite");phone.appendChild(el("div","sys","Text thread with "+T.shop));left.appendChild(phone);
+    var btns=el("div","row");left.appendChild(btns);
+    right.appendChild(el("p","label","2. This is what the owner sees. Choose how much money data is shown."));
+    var seg=el("div","seg");seg.setAttribute("role","group");seg.setAttribute("aria-label","Privacy level");right.appendChild(seg);
+    var names=["Counts only","Average job","Real invoices"],segB=[];
+    names.forEach(function(n,i){var b=el("button","",n);b.type="button";b.addEventListener("click",function(){level=i+1;render();});seg.appendChild(b);segB.push(b);});
+    var note=el("p","sub");right.appendChild(note);
+    var rep=el("div","report");right.appendChild(rep);
+    var hl=el("p","label"),big=el("div","big num"),kp=el("div","kp"),bars=el("div");bars.style.cssText="display:flex;flex-direction:column;gap:7px";
+    var lk=el("span","lock");lk.innerHTML='<span class="mark" aria-hidden="true"><i></i><i><svg viewBox="0 0 62 62" fill="none"><path d="M12 33 L26 46 L50 17" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg></i></span>Owner report';rep.appendChild(lk);rep.appendChild(hl);rep.appendChild(big);rep.appendChild(kp);rep.appendChild(el("p","label","Booked jobs by urgency"));rep.appendChild(bars);
+    var notes=["Counts only. We never see a dollar figure. Every shop starts here.","You give us one number, your average job ($900 here). Dollars are estimates. We never see an invoice.","Real invoice totals from your scheduling software. Only if you ask for it."];
+    function render(){
+      var add=extra.e+extra.r,rec=23+add,booked=81+add;
+      segB.forEach(function(b,i){b.setAttribute("aria-pressed",String(i+1===level));});
+      note.textContent=notes[level-1];
+      hl.textContent="This month";
+      big.textContent=level===1?String(rec):level===2?"~"+money(rec*900):money(23750+T.amt.e*extra.e+T.amt.r*extra.r);big.appendChild(el("small","",level===1?"jobs brought back":level===2?"estimated":"from invoices"));
+      kp.textContent="";[["Missed calls caught",38+add],["Jobs booked",booked],["Close rate",Math.round(booked/(142+add)*100)+"%"]].forEach(function(k){var d=el("div");d.appendChild(el("p","label",k[0]));d.appendChild(el("p","num",String(k[1])));kp.appendChild(d);});
+      bars.textContent="";var u=[["Emergency",19+extra.e,"e"],["Same-day",27,"s"],["Routine",35+extra.r,""]],max=Math.max(u[0][1],u[1][1],u[2][1]);
+      u.forEach(function(r){var b=el("div","bar");b.appendChild(el("span","",r[0]));var t=el("div","track"),f=el("div","fill "+r[2]);f.style.width=(r[1]/max*100).toFixed(1)+"%";t.appendChild(f);b.appendChild(t);b.appendChild(el("span","val",String(r[1])));bars.appendChild(b);});
+    }
+    function play(kind){
+      if(busy)return;busy=true;simB.forEach(function(b){b.disabled=true;});
+      while(phone.children.length>1)phone.removeChild(phone.lastChild);
+      var st=T.sims[kind].steps,i=0;
+      function add(s){phone.appendChild(el("div",(s[0]==="in"||s[0]==="out")?"msg "+s[0]:s[0],s[1]));}
+      function done(){extra[kind]=1;busy=false;simB.forEach(function(b){b.disabled=false;});render();}
+      if(reduce){st.forEach(add);done();return;}
+      (function next(){add(st[i]);i++;if(i<st.length)setTimeout(next,1000);else done();})();
+    }
+    var simB=[];Object.keys(T.sims).forEach(function(k){var b=el("button","ghost",T.sims[k].btn);b.type="button";b.addEventListener("click",function(){play(k);});btns.appendChild(b);simB.push(b);});
+    render();
+  }
+
+  /* ---------- trade cards and trade page ---------- */
+  Object.keys(TRADES).forEach(function(k){var T=TRADES[k],c=el("div","trade");c.appendChild(el("h3","",T.name));c.appendChild(el("p","sub",T.blurb));
+    if(T.live){var a=el("a","ghost","See "+T.name.toLowerCase());a.href="#"+k;a.setAttribute("data-nav",k);c.appendChild(a);}else c.appendChild(el("span","soon",T.soon||"Coming later"));
+    $("tradeCards").appendChild(c);});
+  function fill(id,arr){var u=$(id);u.textContent="";arr.forEach(function(t){u.appendChild(el("li","",t));});}
+  function showTrade(k){var T=TRADES[k];
+    $("tLabel").textContent="Solid Copy Systems · "+T.name+" · Orange County";$("tH1").textContent=T.h1;$("tSub").textContent=T.sub;$("tSortH").textContent=T.sortH;
+    fill("tE",T.E);fill("tS",T.S);fill("tR",T.R);$("tMonth").textContent=T.month;fill("tList",T.list);
+    $("demoHome").textContent="";mountDemo($("demoTrade"),k,false);$("tSafety").textContent=T.safety||"Anyone who mentions a gas smell is told to get out and call 911 or the gas company. The system never tries to book that one.";$("v-home").hidden=true;$("v-trade").hidden=false;}
+  function showHome(){$("demoTrade").textContent="";if(!$("demoHome").firstChild)mountDemo($("demoHome"),"plumbing",true);$("v-trade").hidden=true;$("v-home").hidden=false;}
+
+  /* ---------- navigation: a trade key opens its page, anything else is a section on the main page ---------- */
+  var PAGES=["home","trades","how","pricing","data","pilot","faq","contact"];
+  function mark(key){document.querySelectorAll(".topbar nav a").forEach(function(a){if(a.getAttribute("data-nav")===key)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current");});}
+  function setPage(pg){document.querySelectorAll("#v-home [data-page]").forEach(function(n){n.hidden=n.getAttribute("data-page").split(" ").indexOf(pg)<0;});mark(pg);}
+  function go(target,push){
+    if(TRADES[target]&&TRADES[target].live){showTrade(target);mark("trades");window.scrollTo(0,0);}
+    else if(target==="demo"){if($("v-trade").hidden){showHome();setPage("home");}var d=document.getElementById("demo");if(d)d.scrollIntoView();return;}
+    else{var pg=PAGES.indexOf(target)>=0?target:"home";target=pg;showHome();setPage(pg);window.scrollTo(0,0);}
+    if(push){try{history.replaceState(null,"","#"+target);}catch(e){}}
+  }
+  document.addEventListener("click",function(e){var a=e.target.closest("[data-nav]");if(!a)return;e.preventDefault();go(a.getAttribute("data-nav"),true);});
+
+  /* ---------- pilot request ---------- */
+  $("pilotForm").addEventListener("submit",function(e){e.preventDefault();
+    var n=$("pName").value.trim(),s=$("pShop").value.trim(),p=$("pPhone").value.trim(),err=$("pErr");
+    if(!n||!s||!p){err.textContent="Add your name, shop name, and a phone number so we can reach you.";err.hidden=false;return;}
+    err.hidden=true;
+    $("pText").value="Hi, this is "+n+" from "+s+". I'd like one of the free 30-day pilot spots for missed-call text-back. Best number: "+p+". Best time to stop by: "+$("pTime").value.toLowerCase()+".";
+    $("pOut").hidden=false;$("pCopied").hidden=true;$("pOut").scrollIntoView({block:"nearest"});});
+  $("pCopy").addEventListener("click",function(){var t=$("pText");
+    function fallback(){t.focus();t.select();$("pCopied").textContent="Selected. Press copy on your keyboard or long-press.";$("pCopied").hidden=false;}
+    try{navigator.clipboard.writeText(t.value).then(function(){$("pCopied").textContent="Copied.";$("pCopied").hidden=false;},fallback);}catch(e){fallback();}});
+
+  var h=(location.hash||"").slice(1);showHome();setPage("home");if(h)go(h,false);
+  window.addEventListener("hashchange",function(){go((location.hash||"").slice(1),false);});
+})();
+</script>
+
+</body></html>
